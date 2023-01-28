@@ -73,7 +73,7 @@ export const itemNameExists = (
   }
   next();
 };
-/* export const ensureIdAndItemName = (
+export const ensureIdAndItemName = (
   req: Request,
   res: Response,
   next: NextFunction
@@ -81,13 +81,8 @@ export const itemNameExists = (
   const { id, itemName } = req.params;
 
   const findId = database.findIndex((elem) => elem.id === Number(id));
-  const findItemName = database[findId].map(
-    (elem: { data: { name: string } }) => elem.data.name === itemName
-  );
+  const findItem = database.forEach((elem) => elem.data.name === itemName);
 
-  if (!findItemName) {
-    return res.status(404).json({ message: "item not found" });
-  }
   if (findId === -1) {
     return res.status(404).json({ message: "id not found" });
   }
@@ -96,4 +91,3 @@ export const itemNameExists = (
 
   next();
 };
- */
