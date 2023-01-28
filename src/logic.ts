@@ -44,7 +44,6 @@ export const deleteItemName = (
   { findListId, itemNameExists }: Request,
   res: Response
 ) => {
-  console.log(itemNameExists);
   database.splice(findListId, 1);
 
   return res.status(204).json();

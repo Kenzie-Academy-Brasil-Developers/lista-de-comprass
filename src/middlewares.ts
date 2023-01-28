@@ -24,12 +24,6 @@ export const validatedBodyMiddleware = (
       message: "invalid input",
     });
   }
-  /* 
-  if (!dataKeys.includes(req.body.data)) {
-    return res.status(400).json({
-      message: "data invalid",
-    });
-  } */
 
   const { listName, data } = req.body;
 
