@@ -5,10 +5,7 @@ declare global {
     interface Request {
       validatedBody: {
         listName: string;
-        data: {
-          name: string;
-          quantity: string;
-        };
+        data: Idata;
       };
       findListId: number;
       itemNameExists: string;

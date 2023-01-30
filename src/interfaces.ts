@@ -1,9 +1,6 @@
 export interface IListRequest {
   listName: string;
-  data: {
-    name: string;
-    quantity: string;
-  };
+  data: Idata;
 }
 
 export interface Idata {

@@ -1,9 +1,4 @@
-import {
-  ensureIdAndItemName,
-  ensureIdExists,
-  itemNameExists,
-  validatedBodyMiddleware,
-} from "./middlewares";
+import { ensureIdExists, validatedBodyMiddleware } from "./middlewares";
 import {
   createPurchaseList,
   deleteItemName,
@@ -20,8 +15,8 @@ app.use(express.json());
 app.post("/purchaseList", validatedBodyMiddleware, createPurchaseList);
 app.get("/purchaseList", listPurchaseList);
 app.get("/purchaseList/:id", ensureIdExists, listPurchaseById);
-app.patch("/purchaseList/:id/:itemName", ensureIdAndItemName, updateList);
-app.delete("/purchaseList/:id/:itemName", ensureIdAndItemName, deleteItemName);
+app.patch("/purchaseList/:id/:itemName", ensureIdExists, updateList);
+app.delete("/purchaseList/:id/:itemName", ensureIdExists, deleteItemName);
 app.delete("/purchaseList/:id", ensureIdExists, deleteList);
 
 app.listen(3000, () => {

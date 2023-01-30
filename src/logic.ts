@@ -25,13 +25,20 @@ export const listPurchaseById = ({ findListId }: Request, res: Response) => {
   return res.status(200).json(database[findListId]);
 };
 
-export const updateList = (
-  { validatedBody, findListId }: Request,
-  res: Response
-) => {
-  database[findListId] = { ...database[findListId], ...validatedBody };
+export const updateList = (req: Request, res: Response) => {
+  const id = Number(req.params.id);
+  const name: any = req.params.itemName;
+  const newName = req.body;
 
-  return res.status(200).json(database[findListId]);
+  if (database.includes(name)) {
+    return res.status(400).json({
+      message: "name not found",
+    });
+  }
+
+  const newList = (database[id] = { ...database[id], ...newName });
+
+  return res.status(200).json(newList);
 };
 
 export const deleteList = ({ findListId }: Request, res: Response) => {
@@ -40,11 +47,18 @@ export const deleteList = ({ findListId }: Request, res: Response) => {
   return res.status(204).json();
 };
 
-export const deleteItemName = (
-  { findListId, itemNameExists }: Request,
-  res: Response
-) => {
-  database.splice(findListId, 1);
+export const deleteItemName = (req: Request, res: Response) => {
+  const id = Number(req.params.id);
+  const name: any = req.params.itemName;
+  const newName = req.body;
+
+  if (database.includes(name)) {
+    return res.status(400).json({
+      message: "name not found",
+    });
+  }
+
+  database.splice(id, 1);
 
   return res.status(204).json();
 };
