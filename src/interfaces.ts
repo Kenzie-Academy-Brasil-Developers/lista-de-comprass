@@ -1,6 +1,6 @@
 export interface IListRequest {
   listName: string;
-  data: Idata;
+  data: Array<Idata>;
 }
 
 export interface Idata {

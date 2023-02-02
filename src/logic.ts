@@ -1,7 +1,6 @@
-import { itemNameExists } from "./middlewares";
-import express, { Request, response, Response } from "express";
-import { database, ids } from "./database";
-import { Ilist, IListRequest } from "./interfaces";
+import { Request, Response } from "express";
+import { database } from "./database";
+import { Ilist } from "./interfaces";
 
 export const createPurchaseList = (
   { validatedBody }: Request,
@@ -21,44 +20,41 @@ export const listPurchaseList = (req: Request, res: Response): Response => {
   return res.status(200).json(database);
 };
 
-export const listPurchaseById = ({ findListId }: Request, res: Response) => {
-  return res.status(200).json(database[findListId]);
+export const listPurchaseById = ({ findListIndex }: Request, res: Response) => {
+  return res.status(200).json(database[findListIndex]);
 };
 
-export const updateList = (req: Request, res: Response) => {
-  const id = Number(req.params.id);
-  const name: any = req.params.itemName;
-  const newName = req.body;
+export const updateList = (req: Request, res: Response): Response => {
+  const { findListIndex } = req;
+  const { name, quantity } = req.body;
+  const item = req.params.itemName;
 
-  if (database.includes(name)) {
-    return res.status(400).json({
-      message: "name not found",
-    });
-  }
+  const findItem: number = database[findListIndex].data.findIndex(
+    (elem) => elem.name === item
+  );
+  database[findListIndex].data[findItem] = {
+    name,
+    quantity,
+  };
 
-  const newList = (database[id] = { ...database[id], ...newName });
-
-  return res.status(200).json(newList);
+  return res.status(200).json(database[findListIndex]);
 };
 
-export const deleteList = ({ findListId }: Request, res: Response) => {
-  database.splice(findListId, 1);
+export const deleteList = ({ findListIndex }: Request, res: Response) => {
+  database.splice(findListIndex, 1);
 
   return res.status(204).json();
 };
 
 export const deleteItemName = (req: Request, res: Response) => {
-  const id = Number(req.params.id);
-  const name: any = req.params.itemName;
-  const newName = req.body;
+  const { findListIndex } = req;
+  const item: string = req.params.itemName;
 
-  if (database.includes(name)) {
-    return res.status(400).json({
-      message: "name not found",
-    });
-  }
+  const findItem: number = database[findListIndex].data.findIndex(
+    (elem) => elem.name === item
+  );
 
-  database.splice(id, 1);
+  database[findListIndex].data.splice(findItem, 1);
 
   return res.status(204).json();
 };

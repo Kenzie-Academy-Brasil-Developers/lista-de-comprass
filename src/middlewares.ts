@@ -5,7 +5,7 @@ export const validatedBodyMiddleware = (
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+): Response | void => {
   const keys: Array<string> = Object.keys(req.body);
   const requiredKeys: Array<IPurchaseListRequiredKeys> = ["data", "listName"];
   const dataKeys: Array<IdataRequiredKeys> = ["name", "quantity"];
@@ -16,7 +16,7 @@ export const validatedBodyMiddleware = (
 
   if (req.method === "PATCH") {
     validatedKeys = requiredKeys.some((key: string) => keys.includes(key));
-    req.body = { ...database[req.findListId], ...req.body };
+    req.body = { ...database[req.findListIndex], ...req.body };
   }
 
   if (!validatedKeys) {
@@ -39,49 +39,16 @@ export const ensureIdExists = (
   req: Request,
   res: Response,
   next: NextFunction
-) => {
+): Response | void => {
   const { id, itemName } = req.params;
 
-  const findId = database.findIndex((elem) => elem.id === Number(id));
+  const listIndex = database.findIndex((elem) => elem.id === Number(id));
 
-  if (findId === -1) {
-    return res.status(404).json({ message: "id not found" });
+  if (listIndex === -1) {
+    return res.status(404).json({ message: "Purchase list not found" });
   }
 
-  req.findListId = findId;
-
-  next();
-};
-
-export const itemNameExists = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const { itemName } = req.params;
-
-  const findItemName = database.find((elem) => elem.data.name === itemName);
-
-  if (!findItemName) {
-    return res.status(404).json({ message: "item not found" });
-  }
-  next();
-};
-export const ensureIdAndItemName = (
-  req: Request,
-  res: Response,
-  next: NextFunction
-) => {
-  const { id, itemName } = req.params;
-
-  const findId = database.findIndex((elem) => elem.id === Number(id));
-  const findItem = database.forEach((elem) => elem.data.name === itemName);
-
-  if (findId === -1) {
-    return res.status(404).json({ message: "id not found" });
-  }
-
-  req.findListId = findId;
+  req.findListIndex = listIndex;
 
   next();
 };
