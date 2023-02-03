@@ -40,7 +40,7 @@ export const ensureIdExists = (
   res: Response,
   next: NextFunction
 ): Response | void => {
-  const { id, itemName } = req.params;
+  const { id } = req.params;
 
   const listIndex = database.findIndex((elem) => elem.id === Number(id));
 
